@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 # Create your views here.
-
+from django.db import IntegrityError
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from .models import Book, Author, BookInstance, Genre
 
 
@@ -167,3 +169,26 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
     model = Book
     success_url = reverse_lazy('books')
     permission_required = 'catalog.can_mark_returned'
+
+
+def crear_usuario(request):
+    if request.method == 'GET':
+        return render(request, 'crear_usuario.html', {
+            'form': UserCreationForm
+        })
+    else:
+        if request.POST['password1'] == request.POST['password2']:
+            try:
+                user = User.objects.create_user(username=request.POST['username'],
+                                                password=request.POST['password1'])
+                user.save()
+                return redirect('index')
+            except IntegrityError:
+                return render(request, 'crear_usuario.html', {
+                    'form': UserCreationForm,
+                    'error': 'Username already exists'
+                })
+        return render(request, 'crear_usuario.html', {
+            'form': UserCreationForm,
+            'error': 'Password do not match'
+        })
