@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="card">
+  <!-- <h5 class="card-header">Featured</h5> -->
+  <div class="card-body">
+    <h5 class="card-title">{{ author }}</h5>
+    <p class="card-text">{{author.date_of_birth}} - {% if author.date_of_death %}{{author.date_of_death}}{% endif %}</p>
+    <!-- <p class="card-text">.</p> -->
+    <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+  </div>
+</div>
+<br>
+<!-- <h1>Author:  </h1> -->
+<div class="card">
+  <h5 class="mb-1" style="padding: 10px;">Books</h5>
+  <div class="list-group">
+    {% for book in author.book_set.all %}
+    <a href="{% url 'book-detail' book.pk %}" class="list-group-item list-group-item-action">
+      <div class="d-flex w-100 justify-content-between">
+        <h6 class="mb-1">{{book}} ({{book.bookinstance_set.all.count}})</h6>
+        <!-- <small class="text-body-secondary">3 days ago</small> -->
+      </div>
+      <p class="mb-1">{{book.summary}}</p>
+      <!-- <small class="text-body-secondary">And some muted small print.</small> -->
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Book List</h1>
+
+    {% if book_list %}
+    <!-- <div class="row row-cols-1 row-cols-md-3 g-4"> -->
+    <div class="list-group">
+      {% for book in book_list %}
+        <a href="{{ book.get_absolute_url }}" class="list-group-item list-group-item-action">
+          {{ book.title }} ({{book.author}})
+        </a>
+      {% endfor %}
+    </div>
+    {% else %}
+      <p>There are no books in the library.</p>
+    {% endif %}       
+{% endblock %}
+
